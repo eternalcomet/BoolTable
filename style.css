@@ -1,0 +1,30 @@
+h1 {
+    text-align: center;
+}
+
+div#sign button {
+    height: 25px;
+    line-height: 20px;
+    width: 28px;
+}
+
+input[type="text"] {
+    width: 75%;
+}
+
+#generate {
+    width: 10%;
+}
+
+table {
+    width: 300px;
+    margin: 0 auto;
+    border: 1px solid #4400ff;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    border: 1px solid #4400ff;
+    text-align: center;
+}

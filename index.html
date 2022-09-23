@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="widtd=device-widtd, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <title>页面</title>
+    <script src="bool_table.js"></script>
+</head>
+
+<body>
+    <h1>真值表生成工具</h1>
+    <hr />
+    <p>说明:由于逻辑连结词的符号难以直接输入，现提供两种输入方案:</p>
+    <p>1.使用下方按钮输入对应的符号</p>
+    <p>2.使用下表中的替代符号进行输入</p>
+    <table border="0">
+        <tr>
+            <th>连结词</th>
+            <td>∧</td>
+            <td>∨</td>
+            <td>¬</td>
+            <td>⊽</td>
+            <td>→</td>
+            <td>↔</td>
+        </tr>
+        <tr>
+            <th>替代符号</th>
+            <td>&</td>
+            <td>|</td>
+            <td>!</td>
+            <td>^</td>
+            <td>></td>
+            <td>~</td>
+        </tr>
+
+    </table>
+    <div>
+        <span>公式:</span>
+        <input type="text" id="formula" />
+        <button id="generate">生成</button>
+    </div>
+
+    <script>
+        var $$$ = function (id) {
+            return document.getElementById(id);
+        }
+        var formula = $$$("formula");
+        function input_sign() {
+            formula.value = formula.value + event.currentTarget.innerText;
+            formula.focus();
+        }
+    </script>
+
+    <div id="sign">
+        <p>点击输入特殊符号:</p>
+        <button onclick="input_sign()">∧</button>
+        <button onclick="input_sign()">∨</button>
+        <button onclick="input_sign()">¬</button>
+        <button onclick="input_sign()">⊽</button>
+        <button onclick="input_sign()">→</button>
+        <button onclick="input_sign()">↔</button>
+    </div>
+
+    <hr />
+    <h2>控制</h2>
+    <hr />
+    <h2>输出</h2>
+    <hr />
+
+</body>
+
+</html>
