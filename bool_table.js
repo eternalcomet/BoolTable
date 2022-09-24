@@ -1,0 +1,36 @@
+function convert(text) {
+
+}
+var mWorker;
+var running = false;
+function analyze() {
+    try {
+        const text = formula.value;
+        if (running || confirm("上一次的真值表计算尚未完成，是否立即终止？")) {
+            if (mWorker) mWorker.terminate();
+            mWorker = undefined;
+        }
+        if (!mWorker) {
+            mWorker = new Worker("worker.js");
+            mWorker.onerror = (ev) => { throw ev.message; };
+            mWorker.onmessage = (ev) => {
+                let data = ev.data;
+                switch (data.type) {
+                    case "finish":
+                        //TODO
+                        running = false;
+                        break;
+                    case "error":
+                        throw data.msg;
+                }
+            }
+        }
+        mWorker.postMessage(text);
+
+        let pn = convert(text);
+        $$$("re-polish").innerText = pn;
+    } catch (e) {
+        alert("错误：" + e);
+    }
+
+}

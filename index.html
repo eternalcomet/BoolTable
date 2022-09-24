@@ -3,18 +3,21 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="widtd=device-widtd, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="style.css">
-    <title>页面</title>
+    <title>真值表生成工具</title>
     <script src="bool_table.js"></script>
 </head>
 
 <body>
     <h1>真值表生成工具</h1>
     <hr />
-    <p>说明:由于逻辑连结词的符号难以直接输入，现提供两种输入方案:</p>
-    <p>1.使用下方按钮输入对应的符号</p>
-    <p>2.使用下表中的替代符号进行输入</p>
+    <p>说明:请在下方公式框内输入公式，然后点击“生成”，可自动转换为逆波兰式并输出真值表。<br>
+        由于逻辑连结词的符号难以直接输入，现提供两种输入方案:<br />
+        1.使用下方按钮直接输入对应的符号<br />
+        2.使用下表中的替代符号进行输入<br>
+        示例：
+    </p>
     <table border="0">
         <tr>
             <th>连结词</th>
@@ -39,7 +42,7 @@
     <div>
         <span>公式:</span>
         <input type="text" id="formula" />
-        <button id="generate">生成</button>
+        <button id="generate" onclick="analyze()">生成</button>
     </div>
 
     <script>
@@ -64,9 +67,11 @@
     </div>
 
     <hr />
-    <h2>控制</h2>
+    <h2>转换为逆波兰式</h2>
+    <p id="re-polish"></p>
     <hr />
-    <h2>输出</h2>
+    <h2>真值表</h2>
+
     <hr />
 
 </body>

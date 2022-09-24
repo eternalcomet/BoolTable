@@ -9,15 +9,14 @@ div#sign button {
 }
 
 input[type="text"] {
-    width: 75%;
+    width: 60%;
 }
 
 #generate {
-    width: 10%;
+    width: 15%;
 }
 
 table {
-    width: 300px;
     margin: 0 auto;
     border: 1px solid #4400ff;
     border-collapse: collapse;
@@ -27,4 +26,6 @@ th,
 td {
     border: 1px solid #4400ff;
     text-align: center;
+    padding-left: 5px;
+    padding-right: 5px;
 }
