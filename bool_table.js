@@ -6,7 +6,7 @@ var running = false;
 function analyze() {
     try {
         const text = formula.value;
-        if (running || confirm("上一次的真值表计算尚未完成，是否立即终止？")) {
+        if (running && confirm("上一次的真值表计算尚未完成，是否立即终止？")) {
             if (mWorker) mWorker.terminate();
             mWorker = undefined;
         }
@@ -18,14 +18,16 @@ function analyze() {
                 switch (data.type) {
                     case "finish":
                         //TODO
-                        running = false;
                         break;
                     case "error":
-                        throw data.msg;
+
+                        alert("错误：" + data.msg);
                 }
+                running = false;
             }
         }
         mWorker.postMessage(text);
+        running = true;
 
         let pn = convert(text);
         $$$("re-polish").innerText = pn;
