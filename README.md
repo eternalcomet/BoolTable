@@ -1,13 +1,18 @@
 # BoolTable
+
 离散数学的open project
 
 powered by class27-xzh
-# 功能特点
+
+## 功能特点
+
 - 具有GUI，提供内置输入法来输入连结词符号
 - 支持判断连结词优先级，支持使用括号，支持多层嵌套括号
 - 支持生成波兰式和逆波兰式
 - 支持生成真值表
-# 实现原理
+
+## 实现原理
+
 - GUI使用HTML和css实现
 - 主体程序使用JavaScript实现
 - 通过Github Pages功能实现在线访问
