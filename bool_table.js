@@ -1,6 +1,3 @@
-function convert(text) {
-
-}
 var mWorker;
 var running = false;
 function analyze() {
@@ -16,6 +13,11 @@ function analyze() {
             mWorker.onmessage = (ev) => {
                 let data = ev.data;
                 switch (data.type) {
+                    case "gen_post":
+                        $$$("re-polish").innerText = data.msg;
+                        break;
+                    case "gen_pre":
+                        $$$("polish").innerText = data.msg;
                     case "finish":
                         //TODO
                         break;
@@ -29,8 +31,8 @@ function analyze() {
         mWorker.postMessage(text);
         running = true;
 
-        let pn = convert(text);
-        $$$("re-polish").innerText = pn;
+
+
     } catch (e) {
         alert("错误：" + e);
     }
