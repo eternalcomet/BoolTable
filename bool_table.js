@@ -3,6 +3,10 @@ var running = false;
 function analyze() {
     try {
         const text = formula.value;
+        if (text.length === 0) {
+            alert("请输入公式！");
+            return;
+        }
         if (running && confirm("上一次的真值表计算尚未完成，是否立即终止？")) {
             if (mWorker) mWorker.terminate();
             mWorker = undefined;

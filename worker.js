@@ -43,11 +43,12 @@ function build_tree(text, start) {
     /**@type {node} */
     let last_n;
     //change!
-    let sig_not = false;
+    let sig_not = 0;
     let root = n;
     for (let i = start; i < text.length; i++) {
         if (text[i] === '(') {
             let r = build_tree(text, i + 1);
+            last = 2;
             i = r.end;
             r.root.f = n;
             if (n.left) {
@@ -64,10 +65,8 @@ function build_tree(text, start) {
             break;
         }
         if (text[i] === '¬' || text[i] === '!') {
-            if (sig_not) sig_not = false;
-            else sig_not = true;
-            //?
-            if (last === 2) throw new SyntaxError;
+            if (last === 2) throw new SyntaxError; //last input is a var
+            sig_not++;
             continue;
         }
         if (op_table[text[i]]) {
@@ -105,7 +104,17 @@ function build_tree(text, start) {
                 }
                 let new_node = { n: c, i: var_index[c] };
                 //TODO
-                if (sig_not) new_node = new node(new_node, undefined, operator.not);
+                if (sig_not) {
+                    while (sig_not--) {
+                        let nn = new node;
+                        new_node.f = nn;
+                        nn.right = new_node;
+                        nn.op = operator.not;
+                        new_node = nn;
+                    }
+                    sig_not = 0;
+                }
+                new_node.f = n;
                 if (n.left) {
                     n.right = new_node;
                     last_n = n;
@@ -113,7 +122,6 @@ function build_tree(text, start) {
                 } else {
                     n.left = new_node;
                 }
-                new_node.f = n;
             } else {
                 throw new SyntaxError;
             }
@@ -136,7 +144,7 @@ function generate_post(root, text) {
         if (root.right instanceof node) generate_post(root.right, text);
         else text.push(root.right.n);
     }
-    text.push(root.op.v);
+    if (root.op) text.push(root.op.v);
 }
 
 /**
@@ -144,7 +152,7 @@ function generate_post(root, text) {
  * @param {string[]} text
  */
 function generate_pre(root, text) {
-    text.push(root.op.v);
+    if (root.op) text.push(root.op.v);
     if (root.left) {
         if (root.left instanceof node) generate_pre(root.left, text);
         else text.push(root.left.n);
@@ -172,9 +180,11 @@ self.onmessage = (ev) => {
         self.postMessage({ type: "gen_pre", msg: list.join('') });
 
     } catch (e) {
-        if (e instanceof SyntaxError) self.postMessage({ type: "error", msg: "请检查公式是否输入正确！" });
-        else self.postMessage({ type: "error", msg: "发生错误：\n" + e.message });
+        if (e instanceof SyntaxError) {
+            self.postMessage({ type: "error", msg: "请检查公式是否输入正确！" });
+        } else {
+            self.postMessage({ type: "error", msg: "发生错误：\n" + e.message });
+            console.error(e);
+        }
     }
-
-
 }
