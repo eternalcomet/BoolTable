@@ -31,9 +31,27 @@ function node(left, right, op, f) {
 
 let vars = [];
 let var_index = {};
+let var_name = [];
+
 function init() {
     vars = [];
     var_index = {};
+    var_name = [];
+}
+/**
+ * @param {number} cnt 
+ * @param {node} new_node 
+ * @return {node}
+ */
+function deal_not(cnt, new_node) {
+    while (cnt--) {
+        let nn = new node;
+        new_node.f = nn;
+        nn.right = new_node;
+        nn.op = operator.not;
+        new_node = nn;
+    }
+    return new_node;
 }
 
 function build_tree(text, start) {
@@ -42,7 +60,7 @@ function build_tree(text, start) {
     let n = new node;
     /**@type {node} */
     let last_n;
-    //change!
+    //always check sig_not before create a new node
     let sig_not = 0;
     let root = n;
     for (let i = start; i < text.length; i++) {
@@ -50,9 +68,11 @@ function build_tree(text, start) {
             let r = build_tree(text, i + 1);
             last = 2;
             i = r.end;
+            r.root = deal_not(sig_not, r.root);
             r.root.f = n;
             if (n.left) {
                 n.right = r.root;
+                sig_not = 0;
                 last_n = n;
                 n = new node;
             } else {
@@ -101,19 +121,12 @@ function build_tree(text, start) {
                 if (var_index[c] === undefined) {
                     var_index[c] = vars.length;
                     vars.push(0);
+                    var_name.push(c);
                 }
                 let new_node = { n: c, i: var_index[c] };
                 //TODO
-                if (sig_not) {
-                    while (sig_not--) {
-                        let nn = new node;
-                        new_node.f = nn;
-                        nn.right = new_node;
-                        nn.op = operator.not;
-                        new_node = nn;
-                    }
-                    sig_not = 0;
-                }
+                new_node = deal_not(sig_not, new_node);
+                sig_not = 0;
                 new_node.f = n;
                 if (n.left) {
                     n.right = new_node;
@@ -129,6 +142,44 @@ function build_tree(text, start) {
         }
     }
     return { root: root, end: end };
+}
+
+/**
+ * @param {node} root 
+ * @return {number} The result of the formula.
+ */
+function calculate(root) {
+    let l = root.left, r = root.right;
+    if (l) {
+        if (l instanceof node) {
+            l = calculate(l);
+        } else {
+            l = vars[l.i];
+        }
+    }
+    if (r) {
+        if (r instanceof node) {
+            r = calculate(r);
+        } else {
+            r = vars[r.i];
+        }
+    }
+    switch (root.op) {
+        case operator.and:
+            return l & r;
+        case operator.or:
+            return l | r;
+        case operator.not:
+            return r ? 0 : 1;
+        case operator.xor:
+            return l == r ? 0 : 1;
+        case operator.imply:
+            return l == true && r == false ? 0 : 1;
+        case operator.equal:
+            return l == r ? 1 : 0;
+        default:
+            return l; //handle !p cases
+    }
 }
 
 /**
@@ -163,6 +214,19 @@ function generate_pre(root, text) {
     }
 }
 
+function generate_bool_table(root) {
+    let res = var_name.join(' ') + " 结果<br>";
+    for (let i = 0; i < 1 << vars.length; i++) {
+        for (let j = 0; j < vars.length; j++) {
+            let v = i & (1 << j) ? 1 : 0;
+            if (vars[vars.length - 1 - j] == v) break;
+            vars[vars.length - 1 - j] = v;
+        }
+        res += vars.join(' ') + ' ' + calculate(root) + "<br>";
+    }
+    return res;
+}
+
 self.onmessage = (ev) => {
     //caution:memory leak
     const text = ev.data;
@@ -178,6 +242,7 @@ self.onmessage = (ev) => {
         list = [];
         generate_pre(res.root, list);
         self.postMessage({ type: "gen_pre", msg: list.join('') });
+        self.postMessage({ type: "gen_bool_table", msg: generate_bool_table(res.root) });
 
     } catch (e) {
         if (e instanceof SyntaxError) {

@@ -22,11 +22,12 @@ function analyze() {
                         break;
                     case "gen_pre":
                         $$$("polish").innerText = data.msg;
-                    case "finish":
-                        //TODO
+                    case "gen_bool_table":
+                        $$$("bool-table").innerHTML = data.msg;
                         break;
                     case "error":
-
+                        $$$("re-polish").innerText = "";
+                        $$$("polish").innerText = "";
                         alert("错误：" + data.msg);
                 }
                 running = false;
