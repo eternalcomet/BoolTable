@@ -6,8 +6,8 @@ var operator = {
     and: { v: '∧', w: 2 },
     or: { v: '∨', w: 2 },
     xor: { v: '⊽', w: 2 },
-    imply: { v: '→', w: 3 },
-    equal: { v: '↔', w: 3 }
+    imply: { v: '→', w: 3, r: true },
+    equal: { v: '↔', w: 3, r: true }
 };
 var op_table = {
     '∧': operator.and,
@@ -96,7 +96,7 @@ function build_tree(text, start) {
                 n.op = op_table[text[i]];
             } else if (last_n) {
                 n.op = op_table[text[i]];
-                if (n.op.w < last_n.op.w) { //new op has higher priority
+                if (n.op.w < last_n.op.w || (n.op == last_n.op && n.op.r)) { //new op has higher priority
                     n.left = last_n.right;
                     last_n.right.f = n;
                     last_n.right = n;
@@ -124,7 +124,6 @@ function build_tree(text, start) {
                     var_name.push(c);
                 }
                 let new_node = { n: c, i: var_index[c] };
-                //TODO
                 new_node = deal_not(sig_not, new_node);
                 sig_not = 0;
                 new_node.f = n;
@@ -141,6 +140,7 @@ function build_tree(text, start) {
 
         }
     }
+    if (root.op && !root.right) throw new SyntaxError;
     return { root: root, end: end };
 }
 

@@ -28,6 +28,7 @@ function analyze() {
                     case "error":
                         $$$("re-polish").innerText = "";
                         $$$("polish").innerText = "";
+                        $$$("bool-table").innerHTML = "";
                         alert("错误：" + data.msg);
                 }
                 running = false;
