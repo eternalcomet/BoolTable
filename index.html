@@ -11,8 +11,9 @@
 
 <body>
     <h1>真值表生成工具</h1>
-    <div>powered by xzh</div>
+    <div>powered by xzh 欢迎进行测试并反馈问题！</div>
     <a href="https://github.com/eternalcomet/BoolTable/">点击访问源代码和说明</a>
+    <a href="https://github.com/eternalcomet/BoolTable/issues/new">点击在Github issues上面提交问题</a>
     <hr />
     <p>说明:请在下方公式框内输入公式(中缀)，然后点击“生成”，可自动转换为波兰式和逆波兰式并输出真值表。命题可以用大写或小写英文字母表示。<br>优先级: () > ¬ > ∧ = ∨ = ⊽ > → = ↔<br>
         由于逻辑连结词的符号难以直接输入，现提供两种输入方案:<br />
@@ -67,17 +68,11 @@
         <button onclick="input_sign()">→</button>
         <button onclick="input_sign()">↔</button>
     </div>
-
     <hr />
-    <h2>转换为逆波兰式</h2>
-    <p id="re-polish"></p>
-    <hr />
-    <h2>转换为波兰式</h2>
-    <p id="polish"></p>
-    <hr />
+    <div>转换为逆波兰式：<span id="re-polish"></span></div>
+    <div>转换为波兰式：<span id="polish"></span></div>
     <h2>真值表</h2>
     <p id="bool-table"></p>
-    <hr />
 
 </body>
 
