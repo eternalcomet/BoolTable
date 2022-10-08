@@ -2,7 +2,6 @@
 
 离散数学的open project
 
-powered by class27-xzh
 
 ## 功能特点
 
